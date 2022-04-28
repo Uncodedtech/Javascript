@@ -5,38 +5,38 @@ describe('SinglyLinkedList', () => {
     const list = new LinkedList()
     expect(list.get()).toEqual([])
 
-    list.addLast(1)
+    expect(list.addLast(1)).toEqual(1)
     expect(list.get()).toEqual([1])
 
-    list.addLast(2)
-    expect(list.get()).toEqual([1, 2])
+    expect(list.addLast(5)).toEqual(2)
+    expect(list.get()).toEqual([1, 5])
   })
 
   it('Check addFirst', () => {
     const list = new LinkedList()
     expect(list.get()).toEqual([])
 
-    list.addFirst(1)
+    expect(list.addFirst(1)).toEqual(1)
     expect(list.get()).toEqual([1])
 
-    list.addFirst(2)
-    expect(list.get()).toEqual([2, 1])
+    expect(list.addFirst(5)).toEqual(2)
+    expect(list.get()).toEqual([5, 1])
   })
 
   it('Check addAt', () => {
     const list = new LinkedList()
     expect(list.get()).toEqual([])
 
-    list.addAt(0, 10)
+    expect(list.addAt(0, 10)).toEqual(1)
     expect(list.get()).toEqual([10])
 
-    list.addAt(1, 20)
+    expect(list.addAt(1, 20)).toEqual(2)
     expect(list.get()).toEqual([10, 20])
 
-    list.addAt(1, 30)
+    expect(list.addAt(1, 30)).toEqual(3)
     expect(list.get()).toEqual([10, 30, 20])
 
-    list.addAt(3, 40)
+    expect(list.addAt(3, 40)).toEqual(4)
     expect(list.get()).toEqual([10, 30, 20, 40])
   })
 
@@ -46,10 +46,10 @@ describe('SinglyLinkedList', () => {
     list.addLast(2)
     expect(list.get()).toEqual([1, 2])
 
-    list.removeLast()
+    expect(list.removeLast()).toEqual(2)
     expect(list.get()).toEqual([1])
 
-    list.removeLast()
+    expect(list.removeLast()).toEqual(1)
     expect(list.get()).toEqual([])
   })
 
@@ -59,10 +59,10 @@ describe('SinglyLinkedList', () => {
     list.addLast(2)
     expect(list.get()).toEqual([1, 2])
 
-    list.removeFirst()
+    expect(list.removeFirst()).toEqual(1)
     expect(list.get()).toEqual([2])
 
-    list.removeFirst()
+    expect(list.removeFirst()).toEqual(2)
     expect(list.get()).toEqual([])
   })
 
@@ -75,13 +75,13 @@ describe('SinglyLinkedList', () => {
     list.addLast(50)
     expect(list.get()).toEqual([10, 20, 30, 40, 50])
 
-    list.removeAt(0)
+    expect(list.removeAt(0)).toEqual(10)
     expect(list.get()).toEqual([20, 30, 40, 50])
 
-    list.removeAt(3)
+    expect(list.removeAt(3)).toEqual(50)
     expect(list.get()).toEqual([20, 30, 40])
 
-    list.removeAt(1)
+    expect(list.removeAt(1)).toEqual(30)
     expect(list.get()).toEqual([20, 40])
   })
 
@@ -92,11 +92,11 @@ describe('SinglyLinkedList', () => {
     list.addLast(30)
     expect(list.get()).toEqual([10, 20, 30])
 
-    list.remove(20)
-    expect(list.get()).toEqual([10, 30])
+    expect(list.remove(10)).toEqual(10)
+    expect(list.get()).toEqual([20, 30])
 
-    list.remove(30)
-    expect(list.get()).toEqual([10])
+    expect(list.remove(100)).toEqual(null)
+    expect(list.get()).toEqual([20, 30])
   })
 
   it('Check indexOf', () => {
@@ -162,5 +162,41 @@ describe('SinglyLinkedList', () => {
 
     list.removeFirst()
     expect(list.size()).toBe(1)
+  })
+
+  it('Check Iterator', () => {
+    const list = new LinkedList()
+
+    let iterate = list.iterator()
+    expect(iterate).toBe(-1)
+
+    const arr = [10, 20, 5]
+    list.addLast(arr[0])
+    list.addLast(arr[1])
+    list.addLast(arr[2])
+    iterate = list.iterator()
+
+    for (let i = 0; i < arr.length; i++) {
+      expect(iterate.next().value).toBe(arr[i])
+    }
+    expect(iterate.next().value).toBe(undefined)
+
+    iterate = list.iterator()
+    let count = 0
+    for (const item of iterate) {
+      expect(item).toBe(arr[count])
+      count++
+    }
+  })
+  it('Cleans the linkedList', () => {
+    const list = new LinkedList()
+    list.addLast(10)
+    list.addLast(20)
+    list.addLast(30)
+    list.addLast(40)
+    list.addLast(50)
+    expect(list.size()).toEqual(5)
+    list.clean()
+    expect(list.isEmpty()).toBe(true)
   })
 })
